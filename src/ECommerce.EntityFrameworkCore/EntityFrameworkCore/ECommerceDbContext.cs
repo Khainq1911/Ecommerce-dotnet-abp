@@ -5,7 +5,6 @@ using Volo.Abp.BlobStoring.Database.EntityFrameworkCore;
 using Volo.Abp.Data;
 using Volo.Abp.DependencyInjection;
 using Volo.Abp.EntityFrameworkCore;
-using Volo.Abp.EntityFrameworkCore.Modeling;
 using Volo.Abp.FeatureManagement.EntityFrameworkCore;
 using Volo.Abp.Identity;
 using Volo.Abp.Identity.EntityFrameworkCore;
@@ -14,6 +13,18 @@ using Volo.Abp.SettingManagement.EntityFrameworkCore;
 using Volo.Abp.OpenIddict.EntityFrameworkCore;
 using Volo.Abp.TenantManagement;
 using Volo.Abp.TenantManagement.EntityFrameworkCore;
+using ECommerce.Carts;
+using ECommerce.Categories;
+using ECommerce.Payments;
+using ECommerce.Shipments;
+using ECommerce.Products;
+using ECommerce.Reviews;
+using ECommerce.Configurations.Carts;
+using ECommerce.Configurations.Categories;
+using ECommerce.Configurations.Payments;
+using ECommerce.Configurations.Shipments;
+using ECommerce.Configurations.Products;
+using ECommerce.Configurations.Reviews;
 
 namespace ECommerce.EntityFrameworkCore;
 
@@ -55,6 +66,16 @@ public class ECommerceDbContext :
     public DbSet<Tenant> Tenants { get; set; }
     public DbSet<TenantConnectionString> TenantConnectionStrings { get; set; }
 
+    // Ecommerce
+    public DbSet<Cart> Carts { get; set; }
+    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Payment> Payments { get; set; }
+    public DbSet<Shipment> Shipments { get; set; }
+    public DbSet<Product> Products { get; set; }
+    public DbSet<ProductImage> ProductImages { get; set; }
+    public DbSet<Review> Reviews { get; set; }
+
     #endregion
 
     public ECommerceDbContext(DbContextOptions<ECommerceDbContext> options)
@@ -78,7 +99,15 @@ public class ECommerceDbContext :
         builder.ConfigureOpenIddict();
         builder.ConfigureTenantManagement();
         builder.ConfigureBlobStoring();
-        
+
+        builder.ApplyConfiguration(new CartConfiguration());
+        builder.ApplyConfiguration(new CartItemConfiguration());
+        builder.ApplyConfiguration(new CategoryConfiguration());
+        builder.ApplyConfiguration(new PaymentConfiguration());
+        builder.ApplyConfiguration(new ShipmentConfiguration());
+        builder.ApplyConfiguration(new ProductConfiguration());
+        builder.ApplyConfiguration(new ReviewConfiguration());
+        builder.ApplyConfiguration(new ProductImageConfiguration());
         /* Configure your own tables/entities inside here */
 
         //builder.Entity<YourEntity>(b =>
