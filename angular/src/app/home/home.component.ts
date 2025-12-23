@@ -5,13 +5,13 @@ import { AuthService, LocalizationPipe } from '@abp/ng.core';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  imports: [LocalizationPipe]
+  imports: [],
 })
 export class HomeComponent {
   private authService = inject(AuthService);
 
   get hasLoggedIn(): boolean {
-    return this.authService.isAuthenticated
+    return this.authService.isAuthenticated;
   }
 
   login() {

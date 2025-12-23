@@ -2,13 +2,13 @@ import { provideAbpCore, withOptions } from '@abp/ng.core';
 import { provideAbpOAuth } from '@abp/ng.oauth';
 import { provideSettingManagementConfig } from '@abp/ng.setting-management/config';
 import { provideFeatureManagementConfig } from '@abp/ng.feature-management';
-import { provideAbpThemeShared,} from '@abp/ng.theme.shared';
+import { provideAbpThemeShared } from '@abp/ng.theme.shared';
 import { provideIdentityConfig } from '@abp/ng.identity/config';
 import { provideAccountConfig } from '@abp/ng.account/config';
 import { provideTenantManagementConfig } from '@abp/ng.tenant-management/config';
-import { registerLocaleForEsBuild } from '@abp/ng.core/locale';
+import { registerLocale, registerLocaleForEsBuild } from '@abp/ng.core/locale';
 import { provideThemeBasicConfig } from '@abp/ng.theme.basic';
-import { provideLogo, withEnvironmentOptions } from "@abp/ng.theme.shared";
+import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
       withOptions({
         environment,
         registerLocaleFn: registerLocale(),
-      }),
+      })
     ),
     provideAbpOAuth(),
     provideIdentityConfig(),
@@ -33,8 +33,8 @@ export const appConfig: ApplicationConfig = {
     provideFeatureManagementConfig(),
     provideAccountConfig(),
     provideTenantManagementConfig(),
-    provideAbpThemeShared(),
-    provideThemeBasicConfig(),
+    /* provideAbpThemeShared(),
+    provideThemeBasicConfig(), */
     provideLogo(withEnvironmentOptions(environment)),
-  ]
+  ],
 };
