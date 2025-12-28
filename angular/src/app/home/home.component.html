@@ -1,1 +1,49 @@
-<p class="text-red-900 text-2xl font-bold">Tailwind đã chạy 🚀</p>
+<div>
+  <div class="flex justify-between items-center">
+    <h2>Category Management</h2>
+    <p-button (onClick)="showDialog()" label="Add Category" icon="pi pi-plus" />
+  </div>
+
+  <p-dialog header="Add Category" [modal]="true" [(visible)]="visible" [style]="{ width: '25rem' }">
+    <form #categoryForm="ngForm" class="p-2 space-y-4" (ngSubmit)="onSubmit(categoryForm)">
+      <!-- Name -->
+      <div>
+        <p-floatlabel variant="on">
+          <input
+            pInputText
+            id="name"
+            name="name"
+            [(ngModel)]="category.name"
+            class="w-full"
+            #name="ngModel"
+            [invalid]="name.invalid && (name.touched || categoryForm.submitted)"
+            required
+          />
+          <label for="name">Name</label>
+        </p-floatlabel>
+        @if (name.invalid && (name.touched || categoryForm.submitted)) {
+        <p-message severity="error" size="small" variant="simple">Name is required.</p-message>
+        }
+      </div>
+
+      <!-- Description -->
+      <p-floatlabel variant="on">
+        <input
+          pInputText
+          id="description"
+          name="description"
+          [(ngModel)]="category.description"
+          class="w-full"
+        />
+        <label for="description">Description</label>
+      </p-floatlabel>
+
+      <!-- Buttons -->
+      <div class="flex justify-end gap-2 pt-2">
+        <p-button label="Cancel" severity="secondary" (onClick)="visible = false" />
+
+        <p-button label="Save" type="submit" />
+      </div>
+    </form>
+  </p-dialog>
+</div>

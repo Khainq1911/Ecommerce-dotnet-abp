@@ -12,15 +12,23 @@ import { provideLogo, withEnvironmentOptions } from '@abp/ng.theme.shared';
 import { ApplicationConfig } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { environment } from '../environments/environment';
 import { APP_ROUTES } from './app.routes';
 import { APP_ROUTE_PROVIDER } from './route.provider';
+import { MessageService } from 'primeng/api';
+import { authInterceptor } from './core/interceptors/auth.interceptor';
+import { errorInterceptor } from './core/interceptors/error.interceptor';
+import { refreshTokenInterceptor } from './core/interceptors/refresh-token.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(APP_ROUTES),
     APP_ROUTE_PROVIDER,
     provideAnimations(),
+    provideHttpClient(
+      withInterceptors([authInterceptor, refreshTokenInterceptor, errorInterceptor])
+    ),
     provideAbpCore(
       withOptions({
         environment,
@@ -33,8 +41,11 @@ export const appConfig: ApplicationConfig = {
     provideFeatureManagementConfig(),
     provideAccountConfig(),
     provideTenantManagementConfig(),
-    /* provideAbpThemeShared(),
-    provideThemeBasicConfig(), */
+    provideAbpThemeShared(),
+    provideThemeBasicConfig(),
     provideLogo(withEnvironmentOptions(environment)),
+
+    // PrimeNG
+    MessageService,
   ],
 };

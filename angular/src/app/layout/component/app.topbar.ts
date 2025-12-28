@@ -1,15 +1,16 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
+import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator],
+  imports: [RouterModule, CommonModule, StyleClassModule, AppConfigurator, Menu],
   template: ` <div class="layout-topbar">
     <div class="layout-topbar-logo-container">
       <button
@@ -103,21 +104,52 @@ import { LayoutService } from '../service/layout.service';
             <i class="pi pi-inbox"></i>
             <span>Messages</span>
           </button>
-          <button type="button" class="layout-topbar-action">
+          <button type="button" class="layout-topbar-action" (click)="menu.toggle($event)">
             <i class="pi pi-user"></i>
             <span>Profile</span>
           </button>
+          <p-menu [model]="items" [popup]="true" #menu />
         </div>
       </div>
     </div>
   </div>`,
 })
-export class AppTopbar {
+export class AppTopbar implements OnInit {
   items!: MenuItem[];
 
-  constructor(public layoutService: LayoutService) {}
+  constructor(public layoutService: LayoutService, private router: Router) {}
 
   toggleDarkMode() {
     this.layoutService.layoutConfig.update(state => ({ ...state, darkTheme: !state.darkTheme }));
+  }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
+    this.router.navigate(['/auth/login']);
+  }
+
+  ngOnInit(): void {
+    this.items = this.items = [
+      {
+        label: 'Hồ sơ',
+        icon: 'pi pi-user',
+        routerLink: '/profile',
+      },
+      {
+        label: 'Đổi mật khẩu',
+        icon: 'pi pi-key',
+        routerLink: '/change-password',
+      },
+      {
+        separator: true,
+      },
+      {
+        label: 'Đăng xuất',
+        icon: 'pi pi-sign-out',
+        linkClass: '!text-red-500 dark:!text-red-400',
+        command: () => this.logout(),
+      },
+    ];
   }
 }
